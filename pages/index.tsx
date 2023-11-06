@@ -1,6 +1,7 @@
 import Layout from '../components/Layout';
 import { ChangeEventHandler, useState, useRef } from 'react';
 import styles from "./index.module.css";
+import Image from 'next/image';
 
 const timeStatus: string[] = [
   "時間がない！",
@@ -62,8 +63,21 @@ const IndexPage = () => {
     setValue(value);
   };
 
+  const getTweetShareURL = () => {
+    let href = 'https://twitter.com/intent/tweet?text=';
+    href += get(timeStatus, value, timeStatus[timeStatus.length - 1]);
+    href += ' %7C ';
+    href += 'jikan-nai%0D%0A';
+    href += '&url=https://jikan-nai.vercel.app/'
+    return (
+      <a href={href} target='_blank' rel="noopener noreferrer">
+        <Image src='/logo-black.png' alt='X(旧Twitter)' width={15} height={15} />
+      </a>
+    );
+  };
+
   return (
-    <Layout title={get(timeStatus, value, timeStatus[timeStatus.length - 1])}>
+    <Layout title={get(timeStatus, value, timeStatus[timeStatus.length - 1]) + ' | jikan-nai'}>
       <div className={styles.page}>
         <div>
           <h1>{get(timeStatus, value, timeStatus[timeStatus.length - 1])}！</h1>
@@ -75,8 +89,7 @@ const IndexPage = () => {
             ない<input type='range' className='slider' value={value} min="0" max="10" onChange={(e) => handleChange(e)} />ある
           </form>
         </div>
-        <div></div>
-        {/* {value} */}
+        <div>{getTweetShareURL()}</div>
       </div>
     </Layout>
   )
